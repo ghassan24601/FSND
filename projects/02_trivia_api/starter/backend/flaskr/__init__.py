@@ -6,6 +6,7 @@ import random
 
 from models import setup_db, Question, Category
 
+
 QUESTIONS_PER_PAGE = 10
 
 
