@@ -19,6 +19,7 @@ class TriviaTestCase(unittest.TestCase):
             "localhost:5432", self.database_name
         )
         setup_db(self.app, self.database_path)
+        self.db = None
 
         # binds the app to the current context
         with self.app.app_context():
@@ -28,13 +29,21 @@ class TriviaTestCase(unittest.TestCase):
             self.db.create_all()
 
     def tearDown(self):
-        """Executed after reach test"""
         pass
 
-    """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
-    """
+    def test_questions_get(self):
+        qs = self.client().get("/questions")
+        data = json.loads(qs.data)
+
+        self.assertTrue(data)
+        self.assertEqual(qs.status_code, 200)
+
+    def test_questions_post(self):
+        qs = self.client().post(
+            "/questions?question='Foo'&answer='bar'&category='cats', difficulty=5"
+        )
+
+        self.assertEqual(qs.status_code, 200)
 
 
 # Make the tests conveniently executable
