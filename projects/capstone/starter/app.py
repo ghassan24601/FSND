@@ -4,12 +4,28 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from .models import Movies, Actors
+from .auth.auth import AuthError, requires_auth
+
+
 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     CORS(app)
+
+    ## Error Handling
+    """
+    Example error handling for unprocessable entity
+    """
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({"success": False, "error": 422, "message": "unprocessable"}), 422
+
+    @app.errorhandler(404)
+    def entity_not_found(error):
+        return jsonify({"success": False, "error": 404, "message": "unprocessable"}), 404
 
     @app.route("/actors", methods=["GET", "POST"])
     def actors():
